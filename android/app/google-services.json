@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "475889337383",
+    "project_id": "pure-o-fresh",
+    "storage_bucket": "pure-o-fresh.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475889337383:android:895aa2c327473d222a3a02",
+        "android_client_info": {
+          "package_name": "com.pureofresh.rider"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP5tgfjoXCZuAoFjUOV2EfP-8sN1ItcHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475889337383:android:a0f4e2f69308d11f2a3a02",
+        "android_client_info": {
+          "package_name": "com.pureofresh.user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP5tgfjoXCZuAoFjUOV2EfP-8sN1ItcHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475889337383:android:185ac5d4403ba33c2a3a02",
+        "android_client_info": {
+          "package_name": "com.pureofresh.vendor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP5tgfjoXCZuAoFjUOV2EfP-8sN1ItcHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
