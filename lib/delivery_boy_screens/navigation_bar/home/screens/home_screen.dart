@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -102,8 +103,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) {
       Future.delayed(Duration.zero, () async {
         DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        final deviceId = androidInfo.id;
+        String deviceId = '';
+        if (Platform.isAndroid) {
+          AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+          deviceId = androidInfo.id;
+        } else if (Platform.isIOS) {
+          IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+          deviceId = iosInfo.identifierForVendor ?? '';
+        }
         // await NotificationController.startListeningNotificationEvents();
         await NotificationController.requestFirebaseToken().then((token) {
           dashboardHomeBloc.add(UpdatingFirebaseKeyEvent(
@@ -623,13 +630,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           if (mounted) {
                                             setState(() {
                                               onlineOfflineStatus =
-                                                  !onlineOfflineStatus!;
+                                                  !(onlineOfflineStatus ??
+                                                      false);
                                             });
                                           }
                                           await _determinePosition();
 
                                           onlineOfflineUpdateapi(
-                                              onlineOfflineStatus!);
+                                              onlineOfflineStatus ?? false);
                                         } else {
                                           Fluttertoast.showToast(
                                               msg:
