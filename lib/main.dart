@@ -127,7 +127,9 @@ Future<void> removeAndRecreateNotificationChannels(
     }
 
     // Create notification channels
-    const String sound = 'resource://raw/warning';
+    final String sound = Platform.isAndroid
+        ? 'resource://raw/warning'
+        : 'warning';
     final notification = NotificationImplementation(
       awesomeChannelService: AwesomeChannelService(
         sound: sound,
@@ -216,7 +218,9 @@ Future<void> main() async {
     }
   });
 
-  const String sound = 'resource://raw/finalbuzzer';
+  const String sound = Platform.isAndroid
+      ? 'resource://raw/finalbuzzer'
+      : 'finalbuzzer';
   final notification = NotificationImplementation(
     awesomeChannelService: AwesomeChannelService(
       sound: sound,
@@ -242,7 +246,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    String sound = 'resource://raw/finalbuzzer';
+    String sound = Platform.isAndroid
+        ? 'resource://raw/finalbuzzer'
+        : 'finalbuzzer';
     final notification = NotificationImplementation(
       awesomeChannelService: AwesomeChannelService(
         // notificationIcon: icon,
