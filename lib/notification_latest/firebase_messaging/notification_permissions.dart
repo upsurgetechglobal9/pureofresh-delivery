@@ -16,9 +16,9 @@ class NotificationPermissions {
     NotificationSettings settings = await firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
-      badge: false,
+      badge: true,
       carPlay: false,
-      criticalAlert: false,
+      criticalAlert: true,
       provisional: false,
       sound: true,
     );

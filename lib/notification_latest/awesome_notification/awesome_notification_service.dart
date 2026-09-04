@@ -251,7 +251,16 @@ class AwesomeNotificationService {
 
   /// Requests notification permission from the user.
   Future<void> requestNotificationPermission() async {
-    await AwesomeNotifications().requestPermissionToSendNotifications();
+    await AwesomeNotifications().requestPermissionToSendNotifications(
+      permissions: [
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Badge,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light,
+        NotificationPermission.CriticalAlert,
+      ],
+    );
   }
 
   // Private helper methods
