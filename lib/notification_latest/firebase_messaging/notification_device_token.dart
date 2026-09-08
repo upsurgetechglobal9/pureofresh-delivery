@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 
@@ -22,6 +24,24 @@ class NotificationDeviceToken {
   /// - A `Future<String>` that provides the device token. If the token cannot be found,
   ///   it returns an empty string.
   Future<String?> getDeviceToken() async {
+    if (Platform.isIOS) {
+      String? apnsToken;
+      int retryCount = 0;
+      const int maxRetries = 10;
+
+      while (apnsToken == null && retryCount < maxRetries) {
+        apnsToken = await _firebaseMessaging.getAPNSToken();
+        if (apnsToken == null) {
+          debugPrint('APNs token is null, retrying... ($retryCount)');
+          await Future.delayed(const Duration(seconds: 1));
+          retryCount++;
+        }
+      }
+
+      if (apnsToken == null) {
+        debugPrint('Failed to get APNs token after $maxRetries retries.');
+      }
+    }
     String? deviceToken = await _firebaseMessaging.getToken();
     debugPrint('Device Token: $deviceToken');
 
