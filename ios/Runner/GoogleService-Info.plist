@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBgws1asa321c9AxzLUQAvyKf-Ds07TTQE</string>
+	<string>AIzaSyDH3X-2CjtsrEl7n98HRi9uAPOgIwSz4uU</string>
 	<key>GCM_SENDER_ID</key>
-	<string>439609339810</string>
+	<string>475889337383</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.pureofresh.rider</string>
 	<key>PROJECT_ID</key>
-	<string>pureofresh-delivery-boy</string>
+	<string>pure-o-fresh</string>
 	<key>STORAGE_BUCKET</key>
-	<string>pureofresh-delivery-boy.firebasestorage.app</string>
+	<string>pure-o-fresh.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:439609339810:ios:c8f373bf71a86bc4e90cfb</string>
+	<string>1:475889337383:ios:15019144f955aa952a3a02</string>
 </dict>
 </plist>

@@ -218,7 +218,7 @@ Future<void> main() async {
     }
   });
 
-  const String sound = Platform.isAndroid
+  final String sound = Platform.isAndroid
       ? 'resource://raw/finalbuzzer'
       : 'finalbuzzer.mp3';
   final notification = NotificationImplementation(

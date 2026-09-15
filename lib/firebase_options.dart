@@ -58,11 +58,11 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBgws1asa321c9AxzLUQAvyKf-Ds07TTQE',
-    appId: '1:439609339810:ios:c8f373bf71a86bc4e90cfb',
-    messagingSenderId: '439609339810',
-    projectId: 'pureofresh-delivery-boy',
-    storageBucket: 'pureofresh-delivery-boy.firebasestorage.app',
+    apiKey: 'AIzaSyDH3X-2CjtsrEl7n98HRi9uAPOgIwSz4uU',
+    appId: '1:475889337383:ios:15019144f955aa952a3a02',
+    messagingSenderId: '475889337383',
+    projectId: 'pure-o-fresh',
+    storageBucket: 'pure-o-fresh.firebasestorage.app',
     iosBundleId: 'com.pureofresh.rider',
   );
 }
