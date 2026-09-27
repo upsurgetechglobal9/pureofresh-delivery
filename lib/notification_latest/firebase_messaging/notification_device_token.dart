@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../commons/shared_prefs.dart';
-// import '../../commons/common_widgets.dart';
 
 /// A class to manage device tokens for Firebase Cloud Messaging (FCM).
 ///
@@ -43,9 +42,13 @@ class NotificationDeviceToken {
       }
     }
     String? deviceToken = await _firebaseMessaging.getToken();
-    debugPrint('Device Token: $deviceToken');
+    debugPrint('====================================================');
+    debugPrint('🔥 FCM DEVICE TOKEN: $deviceToken');
+    debugPrint('====================================================');
 
-    Constants.prefs?.setString('push_token', deviceToken ?? '');
+    if (deviceToken != null && deviceToken.isNotEmpty) {
+      Constants.prefs?.setString('push_token', deviceToken);
+    }
     return deviceToken;
   }
 
@@ -57,6 +60,7 @@ class NotificationDeviceToken {
     _firebaseMessaging.getNotificationSettings();
     _firebaseMessaging.onTokenRefresh.listen((String deviceToken) {
       debugPrint('Updated Device Token: $deviceToken');
+      Constants.prefs?.setString('push_token', deviceToken);
     });
   }
 

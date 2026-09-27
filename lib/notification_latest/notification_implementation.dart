@@ -74,9 +74,12 @@ class NotificationImplementation {
 
   fcmInitialize() async {
     BackGroundNotification().backgroundInitializer();
-    ForegroundMessage(firebaseMessaging).setForegroundNotificationOptions();
-    NotificationPermissions(firebaseMessaging).requestNotificationPermission();
-    NotificationDeviceToken(firebaseMessaging).getDeviceToken();
+    await ForegroundMessage(firebaseMessaging).setForegroundNotificationOptions();
+    await NotificationPermissions(firebaseMessaging).requestNotificationPermission();
+    final deviceTokenManager = NotificationDeviceToken(firebaseMessaging);
+    await deviceTokenManager.getDeviceToken();
+    deviceTokenManager.listenForTokenRefresh();
+
     AwesomeNotifications()
         .getInitialNotificationAction()
         .then((ReceivedAction? event) async {
@@ -113,9 +116,13 @@ void showNotificationIfNew(Map<String, dynamic> data) async {
 }
 
 bool isNewNotification(Map<String, dynamic> data) {
-  String? messageId = data['messageId'] ?? data['operation_id'];
-  return messageId != null &&
-      !previouslyReceivedNotifications.contains(messageId);
+  String? messageId = data['messageId'] ?? data['operation_id'] ?? data['google.message_id'];
+  if (messageId == null) return true;
+  if (previouslyReceivedNotifications.contains(messageId)) {
+    return false;
+  }
+  previouslyReceivedNotifications.add(messageId);
+  return true;
 }
 
 Set<String> previouslyReceivedNotifications = {};
@@ -128,7 +135,11 @@ Future<void> _resetNotificationHandledFlag() async {
 Future<void> showNotification(Map<String, dynamic> data) async {
   print("Notification Received From Firebase");
   print("Show noti ${data['order_accept_notification']}");
-  _resetNotificationHandledFlag();
+  await _resetNotificationHandledFlag();
+
+  String title = data['title']?.toString() ?? 'Notification';
+  String body = data['body']?.toString() ?? '';
+
   if (data['order_accept_notification'].toString() == '2') {
     print("Show noti 2 ${data['order_accept_notification']}");
     await AwesomeNotifications().cancel(1);
@@ -142,10 +153,10 @@ Future<void> showNotification(Map<String, dynamic> data) async {
     });
 
     AwesomeNotificationService().createChatNotification(
-      title: data['title'],
+      title: title,
       payload: payload,
-      body: data['body'],
-      bigPicture: data['image'],
+      body: body,
+      bigPicture: data['image']?.toString(),
       channelKey: _buzzer,
       uid: 1,
       notificationLayout:
@@ -157,15 +168,14 @@ Future<void> showNotification(Map<String, dynamic> data) async {
     if (data['order_accept_notification'].toString() != '2') {
       print("Normal Not sound");
       AwesomeNotificationService().createNotification(
-        title: data['title'],
-        body: data['body'],
-        bigPicture: data['image'],
+        title: title,
+        body: body,
+        bigPicture: data['image']?.toString(),
         channelKey: _normal,
         notificationLayout:
             (data['image'] != null && data['image'].toString().isNotEmpty)
                 ? NotificationLayout.BigPicture
                 : NotificationLayout.BigText,
-        // uid: currentNotificationId, // ✅ Now within 32-bit range
       );
     }
   }

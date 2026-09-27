@@ -69,9 +69,12 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
   doVerify() async {
     final FormState? form = verifyKey.currentState;
     if (form!.validate()) {
+      final pushToken = Constants.prefs?.getString('push_token') ?? '';
       final formData = FormData.fromMap({
         'mobile': widget.number,
         'otp': pincodeController.text,
+        'push_notification_token': pushToken,
+        'fcm_token': pushToken,
       });
       final dio = Dio();
       addChuck(dio);

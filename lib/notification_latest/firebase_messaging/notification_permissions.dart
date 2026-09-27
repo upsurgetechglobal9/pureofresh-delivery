@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,21 @@ class NotificationPermissions {
       provisional: false,
       sound: true,
     );
+
+    // Prompt user for Awesome Notifications permission if not already allowed (crucial for Android 13+)
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) {
+      await AwesomeNotifications().requestPermissionToSendNotifications(
+        permissions: [
+          NotificationPermission.Alert,
+          NotificationPermission.Sound,
+          NotificationPermission.Badge,
+          NotificationPermission.Vibration,
+          NotificationPermission.Light,
+          NotificationPermission.CriticalAlert,
+        ],
+      );
+    }
 
     // Handle the user's response to the permission request.
     _handlePermissionResponse(settings.authorizationStatus);

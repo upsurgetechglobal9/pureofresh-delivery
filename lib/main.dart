@@ -179,7 +179,9 @@ Future<void> main() async {
   }
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   final prefs = await SharedPreferences.getInstance();
   Constants.prefs = await SharedPreferences.getInstance();
   // Constants.prefs!.remove('isrideviewed');
@@ -191,30 +193,18 @@ Future<void> main() async {
       Permission.notification.request();
     }
   });
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    // You can display a notification popup here
-    if (message.notification != null) {
-      print("main first ${message.data.toString()}");
-    }
-  });
 
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-    // Handle foreground messages here
-    if (message.notification != null) {
-      print("main open initstate ${message.data.toString()}");
-
-      print(message.data);
-      print(message.data['type']);
-      if (message.data['order_accept_notification'] == '1') {
-        print("new ride 3");
-        MyApp.navigatorKey.currentState?.pushNamed(
-          NewOrderScreen.routeName,
-          arguments: {
-            'orderId': message.data['operation_id'],
-            'apptype': message.data['apptype']
-          },
-        );
-      }
+    print("main open initstate ${message.data.toString()}");
+    if (message.data['order_accept_notification'] == '1') {
+      print("new ride 3");
+      MyApp.navigatorKey.currentState?.pushNamed(
+        NewOrderScreen.routeName,
+        arguments: {
+          'orderId': message.data['operation_id'],
+          'apptype': message.data['apptype']
+        },
+      );
     }
   });
 
@@ -246,21 +236,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    String sound = Platform.isAndroid
-        ? 'resource://raw/finalbuzzer'
-        : 'finalbuzzer.mp3';
-    final notification = NotificationImplementation(
-      awesomeChannelService: AwesomeChannelService(
-        // notificationIcon: icon,
-        sound: sound,
-      ),
-    );
-    notification.initialize();
-    notification.fcmInitialize();
+    super.initState();
     final notificationService =
         NotificationService(FlutterLocalNotificationsPlugin());
     notificationService.initialize(context);
-    super.initState();
   }
 
   @override

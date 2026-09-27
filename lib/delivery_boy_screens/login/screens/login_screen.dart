@@ -157,12 +157,15 @@ class _LoginSceenState extends State<LoginSceen> {
   Future<void> doVerify() async {
     final FormState? form = verifyKey.currentState;
     if (form!.validate()) {
+      final pushToken = Constants.prefs?.getString('push_token') ?? '';
       final formData = FormData.fromMap({
         'mobile': numberController.text,
         'otp': pincodeController.text,
-        'platform_type': 'android',
+        'platform_type': Platform.isIOS ? 'ios' : 'android',
         'device_id': deviceId,
-        'type': 'login'
+        'type': 'login',
+        'push_notification_token': pushToken,
+        'fcm_token': pushToken,
       });
       final dio = Dio();
       addChuck(dio);
