@@ -27,16 +27,19 @@ Future<void> _removeRideViewed() async {
 
 actionMethod({ReceivedAction? event}) async {
   print("event $event");
+  if (event == null) {
+    print("Action method received null event. Skipping handling.");
+    return;
+  }
+  
   final prefs = await SharedPreferences.getInstance();
-  final data = event?.payload;
+  final data = event.payload;
 
   /// Prevent duplicate processing
   final alreadyHandled = prefs.getBool('notification_handled') ?? false;
   if (alreadyHandled) {
-    _removeRideViewed();
     print("⚠️ Notification already handled. Skipping.");
     if (data?['order_accept_notification'] == '1') {
-      // await Constants.prefs?.setInt('isrideviewed', 0);
       MyApp.navigatorKey.currentState?.pushNamed(
         NewOrderScreen.routeName,
         arguments: {
@@ -45,7 +48,7 @@ actionMethod({ReceivedAction? event}) async {
         },
       );
       await AwesomeNotifications().cancel(1);
-      AwesomeNotificationService().cancelNotification(event?.id ?? 0);
+      AwesomeNotificationService().cancelNotification(event.id ?? 0);
     }
     return;
   }
@@ -55,13 +58,11 @@ actionMethod({ReceivedAction? event}) async {
 
   debugPrint("notification action data >> $data.");
 
-  debugPrint("notification action data >> $data.");
   if (data == null) {
     _removeRideViewed();
   }
   // this is for when notification coming then notification tap to show
   if (data?['order_accept_notification'] == '1') {
-    // await Constants.prefs?.setInt('isrideviewed', 0);
     MyApp.navigatorKey.currentState?.pushNamed(
       NewOrderScreen.routeName,
       arguments: {
@@ -70,12 +71,11 @@ actionMethod({ReceivedAction? event}) async {
       },
     );
     await AwesomeNotifications().cancel(1);
-    AwesomeNotificationService().cancelNotification(event?.id ?? 0);
+    AwesomeNotificationService().cancelNotification(event.id ?? 0);
   }
 
   // this is for when notification coming user click accept Button Then this is showing.
-  if (event?.buttonKeyPressed == _accept) {
-    // await Constants.prefs?.setInt('isrideviewed', 0);
+  if (event.buttonKeyPressed == _accept) {
     MyApp.navigatorKey.currentState?.pushNamed(
       NewOrderScreen.routeName,
       arguments: {
@@ -84,12 +84,12 @@ actionMethod({ReceivedAction? event}) async {
       },
     );
     await Future.delayed(Durations.extralong2);
-    AwesomeNotificationService().cancelNotification(event?.id ?? 0);
+    AwesomeNotificationService().cancelNotification(event.id ?? 0);
   }
 
   // this is for when notification coming user click reject then notification cancel.
-  if (event?.buttonKeyPressed == _reject) {
-    AwesomeNotificationService().cancelNotification(event?.id ?? 0);
+  if (event.buttonKeyPressed == _reject) {
+    AwesomeNotificationService().cancelNotification(event.id ?? 0);
   }
 }
 
@@ -105,14 +105,6 @@ class AwesomeNotificationService {
   static String ids = '';
 
   /// Creates a notification with optional action buttons and a big picture.
-  ///
-  /// [id] - The ID for the notification (default is an empty string).
-  /// [uid] - The unique ID of the notification.
-  /// [title] - The title of the notification.
-  /// [body] - The body content of the notification.
-  /// [bigPicture] - The URL or asset path of the big picture (optional).
-  /// [showButton] - If true, shows an action button in the notification.
-  /// [channelKey] - The channel key for categorizing the notification.
   Future<void> createNotification({
     String? id,
     int? uid,
@@ -136,25 +128,12 @@ class AwesomeNotificationService {
         category: NotificationCategory.Message, // 👈 helps keep expanded
         notificationLayout: notificationLayout,
         actionType: ActionType.Default,
-        // summary: bigPicture != null ? body : null,
         wakeUpScreen: true,
       ),
     );
   }
 
   /// Creates a notification with optional action buttons and a big picture.
-  ///
-  /// [id] - The ID for the notification (default is an empty string).
-  /// [uid] - The unique ID of the notification.
-  /// [title] - The title of the notification.
-  /// [body] - The body content of the notification.
-  /// [bigPicture] - The URL or asset path of the big picture (optional).
-  /// [timeoutAfter] - Duration after which the notification should be dismissed (optional).
-  /// [payload] - Custom payload data (optional).
-  /// [buttonList] - List of action buttons for the notification (optional).
-  /// [wakeUpScreen] - If true, wakes up the screen when the notification is received.
-  /// [notificationLayout] - The layout of the notification.
-  /// [channelKey] - The channel key for categorizing the notification.
   Future<void> createChatNotification({
     String? id,
     int? uid,
@@ -217,7 +196,6 @@ class AwesomeNotificationService {
         notificationLayout: bigPicture != null
             ? NotificationLayout.BigPicture
             : NotificationLayout.BigText,
-        // summary: bigPicture != null ? body : null,
       ),
       schedule: schedule,
       actionButtons: actionButtons,
@@ -225,8 +203,6 @@ class AwesomeNotificationService {
   }
 
   /// Cancels a notification by its ID.
-  ///
-  /// [notificationId] - The ID of the notification to cancel.
   Future<void> cancelNotification(int notificationId) async {
     await AwesomeNotifications().cancel(notificationId);
   }
@@ -272,18 +248,12 @@ class AwesomeNotificationService {
     );
   }
 
-  /// Handles actions when a notification button is pressed.
-
   /// Stores the notification ID in secure storage.
-  ///
-  /// [id] - The notification ID to store.
   Future<void> _storeNotificationId(String? id) async {
     // await SecureStorage.write(key: StorageKey.newOrderItem, value: id ?? '');
   }
 
   /// Builds action buttons for notifications if required.
-  ///
-  /// [showButton] - If true, includes an action button.
   List<NotificationActionButton>? _buildActionButtons(bool? showButton) {
     if (showButton ?? true) {
       return [
@@ -310,6 +280,4 @@ class AwesomeNotificationService {
     }
     return null;
   }
-
-  /// Navigates to the NewRequestScreen with the stored notification ID.
 }

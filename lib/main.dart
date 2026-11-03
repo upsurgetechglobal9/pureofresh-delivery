@@ -237,9 +237,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    final notificationService =
-        NotificationService(FlutterLocalNotificationsPlugin());
-    notificationService.initialize(context);
   }
 
   @override

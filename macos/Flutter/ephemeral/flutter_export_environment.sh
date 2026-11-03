@@ -1,8 +1,8 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/run/media/viru/dev/flutter"
-export "FLUTTER_APPLICATION_PATH=/run/media/viru/dev/github_projects/pure o fresh/pure-o-fresh-delivery-boy-app-flutter-master"
-export "FLUTTER_FRAMEWORK_SWIFT_PACKAGE_PATH=/run/media/viru/dev/github_projects/pure o fresh/pure-o-fresh-delivery-boy-app-flutter-master/macos/Flutter/ephemeral/Packages/.packages/FlutterFramework"
+export "FLUTTER_ROOT=/Users/jeetendraverma/viru/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/jeetendraverma/viru/githubProject/pureofresh-delivery"
+export "FLUTTER_FRAMEWORK_SWIFT_PACKAGE_PATH=/Users/jeetendraverma/viru/githubProject/pureofresh-delivery/macos/Flutter/ephemeral/Packages/.packages/FlutterFramework"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=4.0.0"

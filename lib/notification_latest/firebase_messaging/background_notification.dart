@@ -12,8 +12,13 @@ Future<void> backgroundHandler(RemoteMessage message) async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  print('Handling a background message: ${message.messageId}');
-  print('Background payload data: ${message.data}');
+  debugPrint("====================================================");
+  debugPrint("🔥 [FCM BACKGROUND MESSAGE RECEIVED]");
+  debugPrint("🔥 Message ID: ${message.messageId}");
+  debugPrint("🔥 Notification Title: ${message.notification?.title}");
+  debugPrint("🔥 Notification Body: ${message.notification?.body}");
+  debugPrint("🔥 Data Payload: ${message.data}");
+  debugPrint("====================================================");
 
   Map<String, dynamic> data = Map<String, dynamic>.from(message.data);
   if (message.notification != null) {

@@ -20,24 +20,20 @@ class NotificationImplementation {
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final AwesomeChannelService awesomeChannelService;
 
-  /// Constructor to initialize [NotificationImplementation].
   NotificationImplementation({
     required this.awesomeChannelService,
   });
 
-  /// Initializes Awesome Notifications and creates notification channels.
   Future<void> initialize() async {
-    // Initialize Awesome Notifications
     await awesomeChannelService.initializeChannels(
       channels: _createNotificationChannels(),
     );
   }
 
-  /// Creates notification channels for the application.
   List<NotificationChannel> _createNotificationChannels() {
     return [
       awesomeChannelService.createChannel(
-        criticalAlerts: true,
+        criticalAlerts: false, // Disabled for iOS compatibility without entitlement
         channelKey: _normal,
         channelName: "Normal Notifications",
         channelDescription: "Notifications for normal alerts.",
@@ -46,10 +42,11 @@ class NotificationImplementation {
         importance: NotificationImportance.Max,
         channelShowBadge: false,
         defaultRingtoneType: DefaultRingtoneType.Notification,
-        groupKey: 'normal_group', defaultPrivacy: NotificationPrivacy.Private,
+        groupKey: 'normal_group',
+        defaultPrivacy: NotificationPrivacy.Private,
       ),
       awesomeChannelService.createBuzzerChannel(
-        criticalAlerts: true,
+        criticalAlerts: false, // Disabled for iOS compatibility without entitlement
         channelKey: _buzzer,
         channelName: "Buzzer Notifications",
         channelDescription: "Buzzer for sound alerts.",
@@ -98,18 +95,15 @@ class NotificationImplementation {
 }
 
 Future<void> clearOldNotifications() async {
-  // Check for old notifications and clear them if needed
   List<NotificationModel> pendingNotifications =
       await AwesomeNotifications().listScheduledNotifications();
 
   if (pendingNotifications.isNotEmpty) {
-    await AwesomeNotifications()
-        .cancelAll(); // Clears all scheduled notifications
+    await AwesomeNotifications().cancelAll();
   }
 }
 
 void showNotificationIfNew(Map<String, dynamic> data) async {
-  // Ensure the notification is new before displaying it
   if (isNewNotification(data)) {
     await showNotification(data);
   }
@@ -133,19 +127,16 @@ Future<void> _resetNotificationHandledFlag() async {
 }
 
 Future<void> showNotification(Map<String, dynamic> data) async {
-  print("Notification Received From Firebase");
-  print("Show noti ${data['order_accept_notification']}");
+  debugPrint("🔥 [AwesomeNotification] Displaying notification: $data");
   await _resetNotificationHandledFlag();
 
   String title = data['title']?.toString() ?? 'Notification';
   String body = data['body']?.toString() ?? '';
 
   if (data['order_accept_notification'].toString() == '2') {
-    print("Show noti 2 ${data['order_accept_notification']}");
     await AwesomeNotifications().cancel(1);
   }
   if (data['order_accept_notification'].toString() == '1') {
-    print("Show noti 1 ${data['order_accept_notification']}");
     await AwesomeNotifications().cancel(1);
 
     Map<String, String?>? payload = data.map((key, value) {
@@ -166,7 +157,6 @@ Future<void> showNotification(Map<String, dynamic> data) async {
     );
   } else {
     if (data['order_accept_notification'].toString() != '2') {
-      print("Normal Not sound");
       AwesomeNotificationService().createNotification(
         title: title,
         body: body,
@@ -182,6 +172,5 @@ Future<void> showNotification(Map<String, dynamic> data) async {
 }
 
 int generateSSID() {
-  return DateTime.now().millisecondsSinceEpoch %
-      2147483647; // Ensures it's within the 32-bit limit
+  return DateTime.now().millisecondsSinceEpoch % 2147483647;
 }

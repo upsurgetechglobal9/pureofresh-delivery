@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../logic/bloc/cms_bloc.dart';
@@ -18,8 +18,6 @@ class CMsTypeWiseScreen extends StatefulWidget {
 class _CMsTypeWiseScreenState extends State<CMsTypeWiseScreen> {
   @override
   void initState() {
-    // TODO: implement initState
-
     context.read<CmsBloc>().add(CmsFetchingEvent(api: widget.apiType));
     super.initState();
   }
@@ -28,7 +26,6 @@ class _CMsTypeWiseScreenState extends State<CMsTypeWiseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Colors.transparent,
         backgroundColor: Colors.white,
         elevation: 0,
         titleSpacing: 4,
@@ -49,7 +46,6 @@ class _CMsTypeWiseScreenState extends State<CMsTypeWiseScreen> {
             Navigator.pop(context);
           },
         ),
-        // leading: null,
         title: Text(
           widget.titleType,
           style: GoogleFonts.manrope(
@@ -68,15 +64,12 @@ class _CMsTypeWiseScreenState extends State<CMsTypeWiseScreen> {
           } else if (state is CmsInitial) {
             return const Center(child: Text("Loading..."));
           } else if (state is CmsSuccessState) {
-            // var document = Html(
-            //   data: state.cmsModelData.data,
-            // );
             return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: Html(
-                    data: state.cmsModelData.data,
+                  child: HtmlWidget(
+                    state.cmsModelData.data ?? '',
                   ),
                 ));
           }

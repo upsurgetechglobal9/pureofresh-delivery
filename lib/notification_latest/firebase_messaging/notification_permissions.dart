@@ -6,25 +6,22 @@ import 'package:flutter/material.dart';
 class NotificationPermissions {
   final FirebaseMessaging firebaseMessaging;
 
-  /// Constructor to initialize [NotificationPermissions].
   NotificationPermissions(this.firebaseMessaging);
 
   /// Requests notification permission from the user.
-  ///
-  /// This method prompts the user for permission to send notifications.
-  /// It checks the authorization status after the request.
   Future<void> requestNotificationPermission() async {
+    // Standard permissions for iOS
     NotificationSettings settings = await firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
       carPlay: false,
-      criticalAlert: true,
+      criticalAlert: false, // Set to false unless you have the Apple entitlement
       provisional: false,
       sound: true,
     );
 
-    // Prompt user for Awesome Notifications permission if not already allowed (crucial for Android 13+)
+    // Prompt user for Awesome Notifications permission
     bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
     if (!isAllowed) {
       await AwesomeNotifications().requestPermissionToSendNotifications(
@@ -34,18 +31,14 @@ class NotificationPermissions {
           NotificationPermission.Badge,
           NotificationPermission.Vibration,
           NotificationPermission.Light,
-          NotificationPermission.CriticalAlert,
+          // NotificationPermission.CriticalAlert, // Remove if no entitlement
         ],
       );
     }
 
-    // Handle the user's response to the permission request.
     _handlePermissionResponse(settings.authorizationStatus);
   }
 
-  /// Handles the response from the notification permission request.
-  ///
-  /// This method logs the authorization status to the console.
   void _handlePermissionResponse(AuthorizationStatus status) {
     switch (status) {
       case AuthorizationStatus.authorized:

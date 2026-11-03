@@ -13,6 +13,14 @@ class FirebaseInitialization {
   /// Initializes Firebase Messaging and listens for foreground messages.
   Future<void> firebaseInit() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage payload) async {
+      debugPrint("====================================================");
+      debugPrint("🔥 [FCM FOREGROUND MESSAGE RECEIVED]");
+      debugPrint("🔥 Message ID: ${payload.messageId}");
+      debugPrint("🔥 Notification Title: ${payload.notification?.title}");
+      debugPrint("🔥 Notification Body: ${payload.notification?.body}");
+      debugPrint("🔥 Data Payload: ${payload.data}");
+      debugPrint("====================================================");
+
       // Extract data from the payload, including notification title/body if present
       Map<String, dynamic> data = Map<String, dynamic>.from(payload.data);
       if (payload.notification != null) {
@@ -26,9 +34,7 @@ class FirebaseInitialization {
           showNotification.call(data);
         }
       } else {
-        if (kDebugMode) {
-          debugPrint('Received empty payload data');
-        }
+        debugPrint('🔥 [FCM] Received empty payload data');
       }
     });
   }
